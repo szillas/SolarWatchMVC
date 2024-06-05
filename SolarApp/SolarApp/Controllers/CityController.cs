@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SolarApp.Services.JsonProcessor;
 using SolarApp.Services.Providers.CoordinateProvider;
 using SolarApp.Services.Repository;
 
@@ -9,16 +10,20 @@ public class CityController : Controller
     private readonly ILogger<CityController> _logger;
     private readonly ICityRepository _cityRepository;
     private readonly ICoordinateProvider _coordinateProvider;
+    private readonly IJsonProcessor _jsonProcessor;
 
-    public CityController(ILogger<CityController> logger, ICityRepository cityRepository, ICoordinateProvider coordinateProvider)
+    public CityController(ILogger<CityController> logger, ICityRepository cityRepository, 
+        ICoordinateProvider coordinateProvider, IJsonProcessor jsonProcessor)
     {
         _logger = logger;
         _cityRepository = cityRepository;
         _coordinateProvider = coordinateProvider;
+        _jsonProcessor = jsonProcessor;
     }
     public async Task<IActionResult> Index()
     {
-        try
+        return View();
+        /*try
         {
             var cities = await _cityRepository.GetAll();
             return View(cities);
@@ -27,20 +32,22 @@ public class CityController : Controller
         {
             _logger.LogError(e, "An error occured while trying to list all cities.");
             return StatusCode(500, "An error occured while trying to list all cities.");
-        }
+        }*/
     }
     
     [HttpPost]
-    public async Task<IActionResult> GetCity(string country, string city)
+    public async Task<IActionResult> AddCity(string country, string city)
     {
         try
         {
             var cityToAdd = await _cityRepository.GetByNameAndCountry(city, country);
             if (cityToAdd == null)
             {
-                return NotFound("City is not found!");
+                var openWeatherMapData = await _coordinateProvider.GetCityFromOpenWeatherMap(city, country);
+                cityToAdd = await _jsonProcessor.ProcessWeatherApiCityStringToCity(openWeatherMapData);
+                await _cityRepository.Add(cityToAdd);
             }
-            return Ok(cityToAdd);
+            return RedirectToAction("Index");
         }
         catch (Exception e)
         {

@@ -2,6 +2,51 @@
     ViewData["Title"] = "Cities";
 }
 
+@model IEnumerable<SolarApp.Models.City>
+
 <div class="text-center">
     <h1 class="display-4">City page</h1>
 </div>
+
+<div class="form-container">
+    <form asp-action="AddCity" method="post">
+        <div class="form-group">
+            <label for="Name">City Name</label>
+            <input type="text" class="form-control" id="Name" name="Name" required />
+            <label for="Country">Country</label>
+            <input type="text" class="form-control" id="Country" name="Country" required />
+        </div>
+        <button type="submit" class="btn btn-primary">Add City</button>
+    </form>
+</div>
+
+<div class="table-container">
+    <h2>Cities List</h2>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>City</th>
+            <th>Country</th>
+            <th>Latitude</th>
+            <th>Longitude</th>
+        </tr>
+        </thead>
+        <tbody>
+        
+        </tbody>
+    </table>
+</div>
+
+<style>
+    .form-container {
+        margin-bottom: 20px;
+        padding: 10px;
+        border: black 1px solid;
+    }
+    .table-container {
+        margin-top: 20px;
+    }
+    button {
+        margin-top: 5px;
+    }
+</style>
