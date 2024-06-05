@@ -92,7 +92,7 @@ public class SunriseSunsetController : Controller
         var sunriseSunset = await _sunriseSunsetRepository.GetByDateAndCity(city.Name, dateTime);
         if (sunriseSunset == null)
         {
-            var sunriseSunsetData = await _sunriseSunsetProvider.GetSunriseSunset(city.Latitude, city.Longitude, date);
+            var sunriseSunsetData = await _sunriseSunsetProvider.GetSunriseSunset(city.Latitude, city.Longitude, date, city.TimeZone);
             sunriseSunset = _jsonProcessor.ProcessSunriseSunsetApiStringToSunriseSunset(city, dateTime, sunriseSunsetData);
             await _sunriseSunsetRepository.Add(sunriseSunset);
         }

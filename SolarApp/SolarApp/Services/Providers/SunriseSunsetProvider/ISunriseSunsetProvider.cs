@@ -2,5 +2,5 @@
 
 public interface ISunriseSunsetProvider
 {
-    Task<string> GetSunriseSunset(double latitude, double longitude, string? date);
+    Task<string> GetSunriseSunset(double latitude, double longitude, string? date, string? timeZone);
 }

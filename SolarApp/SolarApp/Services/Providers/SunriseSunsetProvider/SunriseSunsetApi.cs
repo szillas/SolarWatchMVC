@@ -9,7 +9,7 @@ public class SunriseSunsetApi : ISunriseSunsetProvider
         _logger = logger;
     }
     
-    public async Task<string> GetSunriseSunset(double latitude, double longitude, string? date)
+    public async Task<string> GetSunriseSunset(double latitude, double longitude, string? date, string? timeZone)
     {
         var url = $"https://api.sunrise-sunset.org/json?lat={latitude}&lng={longitude}";
         if (!string.IsNullOrEmpty(date))
@@ -24,6 +24,11 @@ public class SunriseSunsetApi : ISunriseSunsetProvider
             {
                 throw new FormatException("Date format is not correct.");
             }
+        }
+
+        if (!string.IsNullOrEmpty(timeZone))
+        {
+            url += $"&tzid={timeZone}";
         }
         
         using var client = new HttpClient();
