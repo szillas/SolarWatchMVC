@@ -3,7 +3,7 @@ using SolarApp.Models;
 
 namespace SolarApp.Services.JsonProcessor;
 
-public class JsonProcessor : IWeatherApiProcessor, ISunriseSunsetApiProcessor, ITimeZoneApiProcessor
+public class JsonProcessor : IJsonProcessor
 {
     private readonly IJsonProcessorHelper _jsonProcessorHelper;
 

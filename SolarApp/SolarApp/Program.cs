@@ -15,7 +15,7 @@ builder.Services.AddSingleton<ICoordinateProvider, OpenWeatherCoordinateProvider
 builder.Services.AddSingleton<ISunriseSunsetProvider, SunriseSunsetApi>();
 builder.Services.AddSingleton<ITimeZoneProvider, TimeApiProvider>();
 builder.Services.AddSingleton<IJsonProcessorHelper, JsonProcessorHelper>();
-//builder.Services.AddSingleton<IJsonProcessor, JsonProcessor>();
+builder.Services.AddSingleton<IJsonProcessor, JsonProcessor>();
 builder.Services.AddScoped<ICityRepository, CityRepository>();
 builder.Services.AddScoped<ISunriseSunsetRepository, SunriseSunsetRepository>();
 
