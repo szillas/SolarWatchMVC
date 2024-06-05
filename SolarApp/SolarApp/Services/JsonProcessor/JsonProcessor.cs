@@ -61,6 +61,21 @@ public class JsonProcessor : IJsonProcessor
         }
         throw new JsonException("Could not get sunrise/sunset information from API.");
     }
+
+    public string? ProcessTimeApiResultStringForTimeZone(string data)
+    {
+        JsonDocument json = JsonDocument.Parse(data);
+        
+        if (json.RootElement.ValueKind == JsonValueKind.Object)
+        {
+            string? timeZone = json.RootElement.TryGetProperty("timeZone", out JsonElement timeZoneJson)
+                ? timeZoneJson.GetString()
+                : null;
+
+            return timeZone;
+        }
+        throw new JsonException("Could not get time zone from API.");
+    }
     
     private string ConvertAmPmTimeTo24Hours(string time)
     {
