@@ -1,46 +1,71 @@
-﻿using SolarApp.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using SolarApp.Data;
+using SolarApp.Models;
 
 namespace SolarApp.Services.Repository;
 
 public class CityRepository : ICityRepository
 {
-    public Task<IEnumerable<City>> GetAll()
+    private readonly SolarWatchDbContext _dbContext;
+
+    public CityRepository(SolarWatchDbContext context)
     {
-        throw new NotImplementedException();
+        _dbContext = context;
+    }
+    public async Task<IEnumerable<City>> GetAll()
+    {
+        return await _dbContext.Cities.ToListAsync();
     }
 
-    public Task<City?> GetById(int id)
+    public async Task<City?> GetById(int id)
     {
-        throw new NotImplementedException();
+        return await _dbContext.Cities.FirstOrDefaultAsync(c => c.Id == id);
     }
 
-    public Task<City?> GetByName(string name)
+    public async Task<City?> GetByName(string name)
     {
-        throw new NotImplementedException();
+        return await _dbContext.Cities.FirstOrDefaultAsync(c => c.Name == name);
     }
 
-    public Task<City?> GetByName(string city, string state)
+    public async Task<City?> GetByName(string city, string state)
     {
-        throw new NotImplementedException();
+        return await _dbContext.Cities.FirstOrDefaultAsync(c => 
+            (c.Country == "US" ||  c.Country == "USA") && c.Name == city && c.State == state);
     }
 
-    public Task<City?> GetByNameAndCountry(string name, string country)
+    public async Task<City?> GetByNameAndCountry(string name, string country)
     {
-        throw new NotImplementedException();
+        return await _dbContext.Cities.FirstOrDefaultAsync(c => c.Name == name && c.Country == country);
     }
 
-    public Task Add(City city)
+    public async Task Add(City city)
     {
-        throw new NotImplementedException();
+        _dbContext.Add(city);
+        await _dbContext.SaveChangesAsync();
     }
 
-    public Task Delete(City city)
+    public async Task Delete(City city)
     {
-        throw new NotImplementedException();
+        _dbContext.Remove(city);
+        await _dbContext.SaveChangesAsync();
     }
 
-    public Task Update(City city)
-    {
-        throw new NotImplementedException();
+    public async Task Update(City city)
+    {  
+        var cityInDb = await _dbContext.Cities.FindAsync(city.Id);
+
+        if (cityInDb == null)
+        {
+            throw new Exception($"City with ID {city.Id} not found.");
+        }
+        
+        cityInDb.Name = city.Name;
+        cityInDb.Latitude = city.Latitude;
+        cityInDb.Longitude = city.Longitude;
+        cityInDb.State = city.State;
+        cityInDb.Country = city.Country;
+
+        _dbContext.Update(cityInDb);
+        await _dbContext.SaveChangesAsync();
     }
 }

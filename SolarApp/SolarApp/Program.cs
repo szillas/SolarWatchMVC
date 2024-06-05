@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+using SolarApp.Data;
 using SolarApp.Services.JsonProcessor;
 using SolarApp.Services.Providers.CoordinateProvider;
 using SolarApp.Services.Providers.SunriseSunsetProvider;
@@ -12,6 +14,9 @@ builder.Services.AddSingleton<ICoordinateProvider, OpenWeatherCoordinateProvider
 builder.Services.AddSingleton<ISunriseSunsetProvider, SunriseSunsetApi>();
 builder.Services.AddSingleton<IJsonProcessor, JsonProcessor>();
 builder.Services.AddScoped<ICityRepository, CityRepository>();
+
+builder.Services.AddDbContext<SolarWatchDbContext>(options => 
+    options.UseInMemoryDatabase("SolarWatchDb"));
 
 var app = builder.Build();
 
