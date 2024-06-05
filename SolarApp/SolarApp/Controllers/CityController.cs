@@ -22,8 +22,7 @@ public class CityController : Controller
     }
     public async Task<IActionResult> Index()
     {
-        return View();
-        /*try
+        try
         {
             var cities = await _cityRepository.GetAll();
             return View(cities);
@@ -32,18 +31,19 @@ public class CityController : Controller
         {
             _logger.LogError(e, "An error occured while trying to list all cities.");
             return StatusCode(500, "An error occured while trying to list all cities.");
-        }*/
+        }
     }
     
     [HttpPost]
-    public async Task<IActionResult> AddCity(string country, string city)
+    public async Task<IActionResult> AddCity(string name, string country)
     {
+        _logger.LogInformation(country);
         try
         {
-            var cityToAdd = await _cityRepository.GetByNameAndCountry(city, country);
+            var cityToAdd = await _cityRepository.GetByNameAndCountry(name, country);
             if (cityToAdd == null)
             {
-                var openWeatherMapData = await _coordinateProvider.GetCityFromOpenWeatherMap(city, country);
+                var openWeatherMapData = await _coordinateProvider.GetCityFromOpenWeatherMap(name, country);
                 cityToAdd = await _jsonProcessor.ProcessWeatherApiCityStringToCity(openWeatherMapData);
                 await _cityRepository.Add(cityToAdd);
             }
@@ -55,4 +55,6 @@ public class CityController : Controller
             return StatusCode(500, "An error occured while trying to get the city.");
         }
     }
+    
+    
 }
