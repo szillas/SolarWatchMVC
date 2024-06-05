@@ -7,4 +7,9 @@
         <UserSecretsId>795c8b5f-a2aa-4697-a805-35a87ca69c00</UserSecretsId>
     </PropertyGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.6" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.6" />
+    </ItemGroup>
+
 </Project>
