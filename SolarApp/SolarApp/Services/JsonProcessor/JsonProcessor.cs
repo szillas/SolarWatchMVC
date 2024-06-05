@@ -3,7 +3,7 @@ using SolarApp.Models;
 
 namespace SolarApp.Services.JsonProcessor;
 
-public class JsonProcessor : IWeatherApiProcessor
+public class JsonProcessor : IWeatherApiProcessor, ISunriseSunsetApiProcessor, ITimeZoneApiProcessor
 {
     private readonly IJsonProcessorHelper _jsonProcessorHelper;
 
@@ -38,6 +38,50 @@ public class JsonProcessor : IWeatherApiProcessor
         }
 
         throw new JsonException($"Could not get coordinates. This city does not exist in the API.");
+    }
+    
+    public SunriseSunset ProcessSunriseSunsetApiStringToSunriseSunset(City city, DateTime date, string data)
+    {
+        JsonDocument json = JsonDocument.Parse(data);
+        
+        if (json.RootElement.ValueKind == JsonValueKind.Object)
+        {
+            JsonElement result = json.RootElement.GetProperty("results");
+
+            string sunriseTo24HoursFrom12 = _jsonProcessorHelper
+                .ConvertAmPmTimeTo24Hours(_jsonProcessorHelper.GetStringProperty(result, "sunrise"));
+            string sunsetTo24HoursFrom12 = _jsonProcessorHelper
+                .ConvertAmPmTimeTo24Hours(_jsonProcessorHelper.GetStringProperty(result, "sunset"));
+            
+            string? timeZone = json.RootElement.TryGetProperty("tzid", out JsonElement timeZoneJson)
+                ? timeZoneJson.GetString()
+                : null;
+
+            return new SunriseSunset
+            {
+                Date = date,
+                City = city,
+                Sunrise = sunriseTo24HoursFrom12,
+                Sunset = sunsetTo24HoursFrom12,
+                TimeZone = timeZone
+            };
+        }
+        throw new JsonException("Could not get sunrise/sunset information from API.");
+    }
+
+    public string? ProcessTimeApiResultStringForTimeZone(string data)
+    {
+        JsonDocument json = JsonDocument.Parse(data);
+        
+        if (json.RootElement.ValueKind == JsonValueKind.Object)
+        {
+            string? timeZone = json.RootElement.TryGetProperty("timeZone", out JsonElement timeZoneJson)
+                ? timeZoneJson.GetString()
+                : null;
+
+            return timeZone;
+        }
+        throw new JsonException("Could not get time zone from API.");
     }
 }
 
