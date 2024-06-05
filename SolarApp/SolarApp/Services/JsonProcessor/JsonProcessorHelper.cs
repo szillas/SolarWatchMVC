@@ -21,4 +21,11 @@ public class JsonProcessorHelper : IJsonProcessorHelper
         }
         throw new JsonException($"Missing required property '{propertyName}' in the city JSON data.");
     }
+    
+    public string ConvertAmPmTimeTo24Hours(string time)
+    {
+        DateTime date = DateTime.Parse(time);
+
+        return date.ToString("HH:mm:ss");
+    }
 }
