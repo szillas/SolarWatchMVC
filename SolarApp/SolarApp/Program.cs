@@ -3,6 +3,7 @@ using SolarApp.Data;
 using SolarApp.Services.JsonProcessor;
 using SolarApp.Services.Providers.CoordinateProvider;
 using SolarApp.Services.Providers.SunriseSunsetProvider;
+using SolarApp.Services.Providers.TimeZoneProvider;
 using SolarApp.Services.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +13,7 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddSingleton<ICoordinateProvider, OpenWeatherCoordinateProvider>();
 builder.Services.AddSingleton<ISunriseSunsetProvider, SunriseSunsetApi>();
+builder.Services.AddSingleton<ITimeZoneProvider, TimeApiProvider>();
 builder.Services.AddSingleton<IJsonProcessor, JsonProcessor>();
 builder.Services.AddScoped<ICityRepository, CityRepository>();
 builder.Services.AddScoped<ISunriseSunsetRepository, SunriseSunsetRepository>();

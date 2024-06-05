@@ -1,4 +1,6 @@
-﻿namespace SolarApp.Services.Providers.TimeZoneProvider;
+﻿using System.Globalization;
+
+namespace SolarApp.Services.Providers.TimeZoneProvider;
 
 public class TimeApiProvider : ITimeZoneProvider
 {
@@ -11,7 +13,9 @@ public class TimeApiProvider : ITimeZoneProvider
     
     public async Task<string> GetTimeZone(double latitude, double longitude)
     {
-        var url = $"https://timeapi.io/api/TimeZone/coordinate?latitude={latitude}&longitude={longitude}";
+        var formattedLatitude = latitude.ToString(CultureInfo.InvariantCulture).Replace(',', '.');
+        var formattedLongitude = longitude.ToString(CultureInfo.InvariantCulture).Replace(',', '.');
+        var url = $"https://timeapi.io/api/TimeZone/coordinate?latitude={formattedLatitude}&longitude={formattedLongitude}";
 
         using var client = new HttpClient();
 

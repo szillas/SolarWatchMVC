@@ -5,6 +5,7 @@ using SolarApp.Services.Extensions;
 using SolarApp.Services.JsonProcessor;
 using SolarApp.Services.Providers.CoordinateProvider;
 using SolarApp.Services.Providers.SunriseSunsetProvider;
+using SolarApp.Services.Providers.TimeZoneProvider;
 using SolarApp.Services.Repository;
 
 namespace SolarApp.Controllers;
@@ -17,10 +18,11 @@ public class SunriseSunsetController : Controller
     private readonly IJsonProcessor _jsonProcessor;
     private readonly ICityRepository _cityRepository;
     private readonly ISunriseSunsetRepository _sunriseSunsetRepository;
+    private readonly ITimeZoneProvider _timeZoneProvider;
 
     public SunriseSunsetController(ILogger<SunriseSunsetController> logger, ICoordinateProvider coordinateDataProvider, 
         ISunriseSunsetProvider sunriseSunsetProvider, IJsonProcessor jsonProcessor, ICityRepository cityRepository, 
-        ISunriseSunsetRepository sunriseSunsetRepository)
+        ISunriseSunsetRepository sunriseSunsetRepository, ITimeZoneProvider timeZoneProvider)
     {
         _logger = logger;
         _coordinateDataProvider = coordinateDataProvider;
@@ -28,6 +30,7 @@ public class SunriseSunsetController : Controller
         _jsonProcessor = jsonProcessor;
         _cityRepository = cityRepository;
         _sunriseSunsetRepository = sunriseSunsetRepository;
+        _timeZoneProvider = timeZoneProvider;
     }
     
     public IActionResult Index(SunriseSunset model)
@@ -70,8 +73,17 @@ public class SunriseSunsetController : Controller
         {
             var openWeatherMapData = await _coordinateDataProvider.GetCityFromOpenWeatherMap(cityName);
             city = await _jsonProcessor.ProcessWeatherApiCityStringToCity(openWeatherMapData);
+
+            var timeZoneData = await _timeZoneProvider.GetTimeZone(city.Latitude, city.Longitude);
+            var timeZone = _jsonProcessor.ProcessTimeApiResultStringForTimeZone(timeZoneData);
+            if (timeZone != null)
+            {
+                city.TimeZone = timeZone;
+            }
+            
             await _cityRepository.Add(city);
         }
+        _logger.LogInformation(city.TimeZone);
         return city;
     }
     
