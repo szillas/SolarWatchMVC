@@ -14,6 +14,7 @@ builder.Services.AddSingleton<ICoordinateProvider, OpenWeatherCoordinateProvider
 builder.Services.AddSingleton<ISunriseSunsetProvider, SunriseSunsetApi>();
 builder.Services.AddSingleton<IJsonProcessor, JsonProcessor>();
 builder.Services.AddScoped<ICityRepository, CityRepository>();
+builder.Services.AddScoped<ISunriseSunsetRepository, SunriseSunsetRepository>();
 
 builder.Services.AddDbContext<SolarWatchDbContext>(options => 
     options.UseInMemoryDatabase("SolarWatchDb"));
