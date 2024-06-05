@@ -2,18 +2,30 @@
     ViewData["Title"] = "Cities";
 }
 
+@model SolarApp.Models.SunriseSunset
+
 <div class="text-center">
     <h1 class="display-4">Sunrise / Sunset page</h1>
 </div>
 
 <div class="form-container mt-2 mb-4 border p-3">
-    <form asp-action="AddCity" method="post">
+    <form asp-action="GetSunriseSunset" method="post">
         <div class="form-group">
             <label for="Name">City Name</label>
             <input type="text" class="form-control" id="Name" name="Name" required />
-            <label for="Country">Country</label>
-            <input type="text" class="form-control" id="Country" name="Country" />
+            <label for="Date">Date</label>
+            <input type="text" class="form-control" id="Date" name="Date" />
         </div>
         <button type="submit" class="btn btn-primary mt-4">Add City</button>
     </form>
+</div>
+
+<h1>Sunrise and Sunset Details</h1>
+
+<div class="details-container">
+    <h2>@Model.City.Name, @Model.City.Country</h2>
+    <p><strong>Date:</strong> @Model.Date.ToString("MMMM dd, yyyy")</p>
+    <p><strong>Sunrise:</strong> @Model.Sunrise</p>
+    <p><strong>Sunset:</strong> @Model.Sunset</p>
+    <p><strong>Time Zone:</strong> @Model.TimeZone</p>
 </div>
