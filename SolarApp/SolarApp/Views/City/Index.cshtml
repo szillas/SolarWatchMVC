@@ -8,7 +8,7 @@
     <h1 class="display-4">City page</h1>
 </div>
 
-<div class="form-container">
+<div class="form-container mt-2 mb-4 border p-3">
     <form asp-action="AddCity" method="post">
         <div class="form-group">
             <label for="Name">City Name</label>
@@ -16,11 +16,11 @@
             <label for="Country">Country</label>
             <input type="text" class="form-control" id="Country" name="Country" required />
         </div>
-        <button type="submit" class="btn btn-primary">Add City</button>
+        <button type="submit" class="btn btn-primary mt-4">Add City</button>
     </form>
 </div>
 
-<div class="table-container">
+<div class="table-container mt-4 border p-3">
     <h2>Cities List</h2>
     <table class="table">
         <thead>
@@ -36,17 +36,3 @@
         </tbody>
     </table>
 </div>
-
-<style>
-    .form-container {
-        margin-bottom: 20px;
-        padding: 10px;
-        border: black 1px solid;
-    }
-    .table-container {
-        margin-top: 20px;
-    }
-    button {
-        margin-top: 5px;
-    }
-</style>
