@@ -30,9 +30,9 @@ public class SunriseSunsetController : Controller
         _sunriseSunsetRepository = sunriseSunsetRepository;
     }
     
-    public IActionResult Index()
+    public IActionResult Index(SunriseSunset model)
     {
-        return View();
+        return View(model);
     }
 
     public async Task<IActionResult> GetSunriseSunset(string name, string date)
@@ -43,7 +43,7 @@ public class SunriseSunsetController : Controller
             var dateTime = date.ParseDateOrDefaultToToday();
             var sunriseSunset = await GetSunFromDbOrApi(city, dateTime, date);
             
-            return Ok(sunriseSunset);
+            return View("Index", sunriseSunset);
             
         }
         catch (JsonException e)

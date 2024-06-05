@@ -9,23 +9,26 @@
 </div>
 
 <div class="form-container mt-2 mb-4 border p-3">
-    <form asp-action="GetSunriseSunset" method="post">
+    <form asp-controller="SunriseSunset" asp-action="GetSunriseSunset" method="post">
         <div class="form-group">
             <label for="Name">City Name</label>
             <input type="text" class="form-control" id="Name" name="Name" required />
             <label for="Date">Date</label>
             <input type="text" class="form-control" id="Date" name="Date" />
         </div>
-        <button type="submit" class="btn btn-primary mt-4">Add City</button>
+        <button type="submit" class="btn btn-primary mt-4">Get Sunrise / Sunset information</button>
     </form>
 </div>
 
-<h1>Sunrise and Sunset Details</h1>
+<h2 class="text-center">Sunrise and Sunset Details</h2>
 
-<div class="details-container">
-    <h2>@Model.City.Name, @Model.City.Country</h2>
-    <p><strong>Date:</strong> @Model.Date.ToString("MMMM dd, yyyy")</p>
-    <p><strong>Sunrise:</strong> @Model.Sunrise</p>
-    <p><strong>Sunset:</strong> @Model.Sunset</p>
-    <p><strong>Time Zone:</strong> @Model.TimeZone</p>
-</div>
+@if (Model != null && Model.City != null)
+{
+    <div class="details-container mt-2 mb-4 border p-3 text-center">
+        <h3 class="mb-4">@Model.City.Name, @Model.City.Country</h3>
+        <p><strong>Date:</strong> @Model.Date.ToString("MM/dd/yyyy")</p>
+        <p><strong>Sunrise:</strong> @Model.Sunrise</p>
+        <p><strong>Sunset:</strong> @Model.Sunset</p>
+        <p><strong>Time Zone:</strong> @Model.TimeZone</p>
+    </div>
+}
